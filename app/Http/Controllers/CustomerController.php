@@ -47,7 +47,7 @@ class CustomerController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
-            'nama'      => 'required',
+            'item'      => 'required',
             'alamat'    => 'required',
             'email'     => 'required|unique:customers',
             'telepon'   => 'required',
@@ -95,7 +95,7 @@ class CustomerController extends Controller
     public function update(Request $request, $id)
     {
         $this->validate($request, [
-            'nama'      => 'required|string|min:2',
+            'item'      => 'required|string|min:2',
             'alamat'    => 'required|string|min:2',
             'email'     => 'required|string|email|max:255|unique:customers',
             'telepon'   => 'required|string|min:2',

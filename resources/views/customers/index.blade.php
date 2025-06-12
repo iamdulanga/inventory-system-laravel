@@ -79,7 +79,7 @@
             ajax: "{{ route('api.customers') }}",
             columns: [
                 {data: 'id', name: 'id'},
-                {data: 'nama', name: 'nama'},
+                {data: 'item', name: 'item'},
                 {data: 'alamat', name: 'alamat'},
                 {data: 'email', name: 'email'},
                 {data: 'telepon', name: 'telepon'},
@@ -108,7 +108,7 @@
                     $('.modal-title').text('Edit Customers');
 
                     $('#id').val(data.id);
-                    $('#nama').val(data.nama);
+                    $('#item').val(data.item);
                     $('#alamat').val(data.alamat);
                     $('#email').val(data.email);
                     $('#telepon').val(data.telepon);

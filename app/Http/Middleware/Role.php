@@ -2,8 +2,8 @@
 
 namespace App\Http\Middleware;
 
-use Closure;
 use Auth;
+use Closure;
 
 class Role
 {
@@ -16,13 +16,23 @@ class Role
      */
     public function handle($request, Closure $next, ...$roles)
     {
-        if (is_array($roles)) {
-            foreach ($roles as $role) {
-                if (Auth::user()->role == $role) {
-                    return $next($request);
-                }
-            }
-            return abort(401, 'Unauthorized');
+        // Check if user is authenticated first
+        if (!auth()->check()) {
+            return redirect()->route('login');
         }
+
+        $user = auth()->user();
+
+        // Check if user exists and has a role
+        if (!$user || !$user->role) {
+            abort(403, 'Unauthorized - No role assigned');
+        }
+
+        // Check if user has one of the required roles
+        if (in_array($user->role, $roles)) {
+            return $next($request);
+        }
+
+        abort(403, 'Unauthorized');
     }
 }

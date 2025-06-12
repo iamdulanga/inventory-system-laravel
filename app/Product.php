@@ -6,12 +6,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class Product extends Model
 {
-    protected $fillable = ['category_id','nama','harga','image','qty'];
+    protected $table = 'products';
 
-    protected $hidden = ['created_at','updated_at'];
-
-    public function category()
-    {
-        return $this->belongsTo(Category::class);
-    }
+    protected $fillable = [
+        'item', 
+        'total_in', 
+        'total_out', 
+        'current_stock', 
+        'stock_alert'
+    ];
 }

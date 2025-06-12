@@ -10,40 +10,31 @@
                     <h3 class="modal-title"></h3>
                 </div>
 
-
                 <div class="modal-body">
                     <input type="hidden" id="id" name="id">
-
-
+                
                     <div class="box-body">
                         <div class="form-group">
-                            <label >Name</label>
-                            <input type="text" class="form-control" id="nama" name="nama"  autofocus required>
+                            <label>Username</label>
+                            <input type="text" class="form-control" id="name" name="name" required>
+                            <span class="help-block with-errors"></span>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Password (leave blank to keep current)</label>
+                            <input type="password" class="form-control" id="password" name="password">
                             <span class="help-block with-errors"></span>
                         </div>
 
                         <div class="form-group">
-                            <label >Address</label>
-                            <input type="text" class="form-control" id="alamat" name="alamat"   required>
+                            <label>Role</label>
+                            <select class="form-control" id="role" name="role" required>
+                                <option value="admin">Admin</option>
+                                <option value="staff">Staff</option>
+                            </select>
                             <span class="help-block with-errors"></span>
                         </div>
-
-                        <div class="form-group">
-                            <label >Email</label>
-                            <input type="email" class="form-control" id="email" name="email"   required>
-                            <span class="help-block with-errors"></span>
-                        </div>
-
-                        <div class="form-group">
-                            <label >Phone</label>
-                            <input type="text" class="form-control" id="telepon" name="telepon"   required>
-                            <span class="help-block with-errors"></span>
-                        </div>
-
-
                     </div>
-                    <!-- /.box-body -->
-
                 </div>
 
                 <div class="modal-footer">
@@ -53,8 +44,5 @@
 
             </form>
         </div>
-        <!-- /.modal-content -->
     </div>
-    <!-- /.modal-dialog -->
 </div>
-<!-- /.modal -->

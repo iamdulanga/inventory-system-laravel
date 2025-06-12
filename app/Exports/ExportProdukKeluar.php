@@ -2,7 +2,7 @@
 
 namespace App\Exports;
 
-use App\Product_Keluar;
+use App\ProductKeluar;
 use Illuminate\Contracts\View\View;
 use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\FromView;
@@ -18,7 +18,7 @@ class ExportProdukKeluar implements FromView
     {
         // TODO: Implement view() method.
         return view('product_keluar.productKeluarAllExcel',[
-            'product_keluar' => Product_Keluar::all()
+            'product_keluar' => ProductKeluar::all()
         ]);
     }
 }

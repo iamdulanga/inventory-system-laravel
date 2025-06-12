@@ -2,15 +2,12 @@
 
 namespace App\Http\Controllers;
 
-
-use App\Exports\ExportProdukMasuk;
-use App\Product;
-use App\Product_Masuk;
-use App\Supplier;
-use PDF;
+use App\ProductMasuk;
+use App\Exports\ProductMasukExport;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
-use Yajra\DataTables\DataTables;
-
+use Maatwebsite\Excel\Facades\Excel;
+use Yajra\DataTables\Facades\DataTables;
 
 class ProductMasukController extends Controller
 {
@@ -18,169 +15,85 @@ class ProductMasukController extends Controller
     {
         $this->middleware('role:admin,staff');
     }
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function index()
     {
-        $products = Product::orderBy('nama','ASC')
-            ->get()
-            ->pluck('nama','id');
-
-        $suppliers = Supplier::orderBy('nama','ASC')
-            ->get()
-            ->pluck('nama','id');
-
-        $invoice_data = Product_Masuk::all();
-        return view('product_masuk.index', compact('products','suppliers','invoice_data'));
+        return view('product_masuk.index');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
+    public function apiProductsIn()
     {
-        //
+        $products = ProductMasuk::all();
+
+        return DataTables::of($products)
+            ->addColumn('action', function ($product) {
+                return '<button onclick="editForm('.$product->id.')" class="btn btn-primary btn-xs">
+                            <i class="fa fa-edit"></i> Edit
+                        </button>
+                        <button onclick="deleteData('.$product->id.')" class="btn btn-danger btn-xs">
+                            <i class="fa fa-trash"></i> Delete
+                        </button>';
+            })
+            ->rawColumns(['action'])
+            ->toJson();
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
-        $this->validate($request, [
-            'product_id'     => 'required',
-            'supplier_id'    => 'required',
-            'qty'            => 'required',
-            'tanggal'        => 'required'
+        $request->validate([
+            'date' => 'required|date',
+            'item' => 'required|string|max:255',
+            'quantity' => 'required|integer|min:1',
         ]);
 
-        Product_Masuk::create($request->all());
-
-        $product = Product::findOrFail($request->product_id);
-        $product->qty += $request->qty;
-        $product->save();
+        ProductMasuk::create($request->all());
 
         return response()->json([
-            'success'    => true,
-            'message'    => 'Products In Created'
+            'success' => true,
+            'message' => 'Product masuk record added successfully',
         ]);
-
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
     {
-        $product_masuk = Product_Masuk::find($id);
-        return $product_masuk;
+        return ProductMasuk::findOrFail($id);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
-        $this->validate($request, [
-            'product_id'     => 'required',
-            'supplier_id'    => 'required',
-            'qty'            => 'required',
-            'tanggal'        => 'required'
+        $request->validate([
+            'date' => 'required|date',
+            'item' => 'required|string|max:255',
+            'quantity' => 'required|integer|min:1',
         ]);
 
-        $product_masuk = Product_Masuk::findOrFail($id);
-        $product_masuk->update($request->all());
-
-        $product = Product::findOrFail($request->product_id);
-        $product->qty += $request->qty;
-        $product->update();
+        $product = ProductMasuk::findOrFail($id);
+        $product->update($request->all());
 
         return response()->json([
-            'success'    => true,
-            'message'    => 'Product In Updated'
+            'success' => true,
+            'message' => 'Record updated successfully',
         ]);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
-        Product_Masuk::destroy($id);
-
+        ProductMasuk::findOrFail($id)->delete();
         return response()->json([
-            'success'    => true,
-            'message'    => 'Products In Deleted'
+            'success' => true,
+            'message' => 'Record deleted successfully',
         ]);
-    }
-
-
-
-    public function apiProductsIn(){
-        $product = Product_Masuk::all();
-
-        return Datatables::of($product)
-            ->addColumn('products_name', function ($product){
-                return $product->product->nama;
-            })
-            ->addColumn('supplier_name', function ($product){
-                return $product->supplier->nama;
-            })
-            ->addColumn('action', function($product){
-                return '<a onclick="editForm('. $product->id .')" class="btn btn-primary btn-xs"><i class="glyphicon glyphicon-edit"></i> Edit</a> ' .
-                    '<a onclick="deleteData('. $product->id .')" class="btn btn-danger btn-xs"><i class="glyphicon glyphicon-trash"></i> Delete</a> ';
-
-
-            })
-            ->rawColumns(['products_name','supplier_name','action'])->make(true);
-
     }
 
     public function exportProductMasukAll()
     {
-        $product_masuk = Product_Masuk::all();
-        $pdf = PDF::loadView('product_masuk.productMasukAllPDF',compact('product_masuk'));
-        return $pdf->download('product_enter.pdf');
-    }
-
-    public function exportProductMasuk($id)
-    {
-        $product_masuk = Product_Masuk::findOrFail($id);
-        $pdf = PDF::loadView('product_masuk.productMasukPDF', compact('product_masuk'));
-        return $pdf->download($product_masuk->id.'_product_enter.pdf');
+        $products = ProductMasuk::all();
+        $pdf = Pdf::loadView('product_masuk.pdf', compact('products'));
+        return $pdf->download('product_masuk_all.pdf');
     }
 
     public function exportExcel()
     {
-        return (new ExportProdukMasuk)->download('product_masuk.xlsx');
+        return Excel::download(new ProductMasukExport, 'product_masuk_all.xlsx');
     }
 }

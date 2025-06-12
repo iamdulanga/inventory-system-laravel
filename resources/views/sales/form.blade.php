@@ -18,7 +18,7 @@
                     <div class="box-body">
                         <div class="form-group">
                             <label >Name</label>
-                            <input type="text" class="form-control" id="nama" name="nama"  autofocus required>
+                            <input type="text" class="form-control" id="item" name="item"  autofocus required>
                             <span class="help-block with-errors"></span>
                         </div>
 

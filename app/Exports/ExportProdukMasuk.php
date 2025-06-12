@@ -2,23 +2,26 @@
 
 namespace App\Exports;
 
-use App\Product_Masuk;
-use Illuminate\Contracts\View\View;
-use Maatwebsite\Excel\Concerns\Exportable;
-use Maatwebsite\Excel\Concerns\FromView;
+use App\ProductMasuk;
+use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Concerns\WithHeadings;
 
-class ExportProdukMasuk implements FromView
+class ProductMasukExport implements FromCollection, WithHeadings
 {
-    /**
-     * melakukan format dokumen menggunakan html, maka package ini juga menyediakan fungsi lainnya agar dapat me-load data tersebut dari file html / blade di Laravel
-     */
-    use Exportable;
-
-    public function view(): View
+    public function collection()
     {
-        // TODO: Implement view() method.
-        return view('product_masuk.productMasukAllExcel',[
-            'product_masuk' => Product_Masuk::all()
-        ]);
+        return ProductMasuk::all();
+    }
+
+    public function headings(): array
+    {
+        return [
+            'ID',
+            'Date',
+            'Item',
+            'Quantity',
+            'Created At',
+            'Updated At'
+        ];
     }
 }

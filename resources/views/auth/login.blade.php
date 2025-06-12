@@ -37,17 +37,18 @@
                             <form class="form-auth-small" method="POST" action="{{ route('login') }}">
                                 @csrf
                                 <div class="form-group">
-                                    <label for="signin-email" class="control-label sr-only">Email</label>
-                                    <input type="email" name="email" class="form-control{{ $errors->has('email') ? ' is-invalid' : '' }}" id="signin-email" value="{{ old('email') }}" required placeholder="Email">
-                                    @if ($errors->has('email'))
+                                    <label for="signin-username" class="control-label sr-only">Username</label>
+                                    <input type="text" name="name" class="form-control{{ $errors->has('name') ? ' is-invalid' : '' }}" 
+                                           id="signin-username" value="{{ old('name') }}" required placeholder="Username">
+                                    @if ($errors->has('name'))
                                     <br>
                                     <div class="alert alert-danger alert-dismissible">
                                         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                                        <strong><i class="icon fa fa-ban"></i> Alert!</strong> &nbsp; {{ $errors->first('email') }}
+                                        <strong><i class="icon fa fa-ban"></i> Alert!</strong> &nbsp; {{ $errors->first('name') }}
                                     </div>
                                     @endif
                                 </div>
-                                <!-- Log on to codeastro.com for more projects! -->
+                                
                                 <div class="form-group">
                                     <label for="signin-password" class="control-label sr-only">Password</label>
                                     <input type="password" class="form-control" name="password" id="signin-password" value="{{ old('password') }}" placeholder="Password">

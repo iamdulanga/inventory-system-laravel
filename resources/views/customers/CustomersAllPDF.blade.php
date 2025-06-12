@@ -52,7 +52,7 @@
         <tbody>
         <tr>
             <td>{{ $c->id }}</td>
-            <td>{{ $c->nama }}</td>
+            <td>{{ $c->item }}</td>
             <td>{{ $c->alamat }}</td>
             <td>{{ $c->email }}</td>
         </tr>

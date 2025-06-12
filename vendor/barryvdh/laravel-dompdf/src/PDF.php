@@ -1,13 +1,14 @@
 <?php
 namespace Barryvdh\DomPDF;
 
+use dompdf;
+use Exception;
 use Dompdf\Dompdf;
 use Dompdf\Options;
-use Exception;
+use Illuminate\Http\Response;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Contracts\View\Factory as ViewFactory;
 use Illuminate\Contracts\Config\Repository as ConfigRepository;
-use Illuminate\Http\Response;
 
 /**
  * A Laravel wrapper for Dompdf

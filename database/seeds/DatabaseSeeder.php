@@ -15,16 +15,14 @@ class DatabaseSeeder extends Seeder
         // $this->call(UsersTableSeeder::class);
 		DB::table('users')->insert([
             [
-                'name'          => 'Admin',
-                'email'         => 'admin@mail.com',
-                'password'      => bcrypt('codeastro.com'),
+                'name'          => 'admin',
+                'password'      => bcrypt('admin'),
                 'created_at'    => date("Y-m-d H:i:s"),
 				'role'          => 'admin'
             ],
             [
-                'name'          => 'Staff',
-                'email'         => 'staff@mail.com',
-                'password'      => bcrypt('codeastro.com'),
+                'name'          => 'staff',
+                'password'      => bcrypt('staff'),
                 'created_at'    => date("Y-m-d H:i:s"),
 				'role'          => 'staff'
             ],

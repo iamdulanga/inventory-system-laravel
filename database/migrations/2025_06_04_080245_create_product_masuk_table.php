@@ -15,15 +15,11 @@ class CreateProductMasukTable extends Migration
     {
         Schema::create('product_masuk', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('product_id')->unsigned();
-            $table->integer('supplier_id')->unsigned();
-            $table->integer('qty');
-            $table->date('tanggal');
+            $table->date('date');
+            $table->string('item');
+            $table->integer('quantity');
             $table->timestamps();
-
-            $table->foreign('product_id')->references('id')->on('products')->onDelete('cascade');
-            $table->foreign('supplier_id')->references('id')->on('suppliers')->onDelete('cascade');
-        });
+        });        
     }
 
     /**
@@ -33,6 +29,6 @@ class CreateProductMasukTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('product_keluar');
+        Schema::dropIfExists('product_masuk');
     }
 }

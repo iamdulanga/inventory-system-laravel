@@ -41,7 +41,7 @@ class SupplierController extends Controller {
 	 */
 	public function store(Request $request) {
 		$this->validate($request, [
-			'nama' => 'required',
+			'item' => 'required',
 			'alamat' => 'required',
 			'email' => 'required|unique:suppliers',
 			'telepon' => 'required',
@@ -86,7 +86,7 @@ class SupplierController extends Controller {
 	 */
 	public function update(Request $request, $id) {
 		$this->validate($request, [
-			'nama' => 'required|string|min:2',
+			'item' => 'required|string|min:2',
 			'alamat' => 'required|string|min:2',
 			'email' => 'required|string|email|max:255|unique:suppliers',
 			'telepon' => 'required|string|min:2',
